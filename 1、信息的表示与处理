@@ -7,3 +7,58 @@
 （1）小端模式的机器与大端模式的机器通信
 （2）阅读内存
 （3）类型转换
+类型转换：
+#include<stdio.h> 
+typedef unsigned char *byte_pointer;
+
+void show_bites(byte_pointer start, size_t len){
+	size_t i;
+	for(i=0;i<len;i++)
+		printf("%.2x",start[i]);
+	printf("\n");
+}
+
+void show_int(int x){
+	show_bites((byte_pointer) &x,sizeof(x));
+}
+
+void show_float(float x){
+	show_bites((byte_pointer) &x, sizeof(x));
+}
+
+void show_pointer(void *x){
+	show_bites((byte_pointer) &x, sizeof(x));
+}
+
+void test_show_bytes(int val){
+	int ival=val;
+	float fval=(float)val;
+	int *pval=&val;
+	
+	show_int(ival);
+	show_float(fval);
+	show_pointer(pval);
+}
+		
+int main(){
+	test_show_bytes(0x123456);
+	return 0;
+}
+
+2、逻辑运算（&&、||、！）与位级运算（&、|、~取反、^异或）
+如果对第一个参数求值就能确定表达式结果，那么逻辑运算符就不会对第二个参数求值
+
+3、移位运算
+左移：舍弃最高位，补零
+逻辑右移：最高位补零，最低位舍弃
+算术右移：最高位补有效位（符号位）
+
+4、补码
+无符号数：求和（权重*对应位的值）
+
+补码：-最高位值*权重+求和（权重*对应位的值）
+
+几乎所有机器都用补码表示有符号数，注意补码的不对称性可能会导致BUG
+
+C库的头文件:<limits.h>定义了一组常量，来限定编译器运行：
+INT_MAX, INT_MIN, UNIT_MAX....
